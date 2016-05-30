@@ -13,13 +13,18 @@ import com.net.core.exception.HttpException;
 import com.net.core.exception.MiddlewareException;
 import com.net.core.http_module.Request;
 import com.net.core.http_module.Response;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
 /**
  * Created by fuxiuyin on 16-5-24.
  */
-class App
+public class App
 {
     private String appName;
     private String appPath;
@@ -30,10 +35,17 @@ class App
     private AppConf conf = null;
 
 
+    public Response run(Request request)
+    {
+        // todo: middlwares
+        return app.run(request);
+    }
+
+
     public App(AppConf conf) throws AppLoadException
     {
         this.conf = conf;
-        String appConfPath = conf.getPath() + "config.jar";
+        String appConfPath = conf.getPath() + "/config.json";
 
         try
         {
@@ -43,6 +55,54 @@ class App
             throw new AppLoadException(conf.getPath(), "配置文件读取失败\n" + e.toString());
             //todo: event
         }
+        appPath = conf.getPath();
+        appName = appConfiguration.getAppName();
+
+        File file = new File(appPath + "/" + appConfiguration.getJarName());
+        URL url;
+        try
+        {
+            url = file.toURL();
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+            throw new AppLoadException(conf.getPath(), "jar加载失败\n" + e.toString());
+        }
+
+        URLClassLoader loader = new URLClassLoader(new URL[]{url});
+        try
+        {
+            app = (UserApp)(loader.loadClass(appConfiguration.getClassName()).newInstance());
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new AppLoadException(conf.getPath(), "指定class未找到" + e.toString());
+        }
+        catch (InstantiationException | IllegalAccessException e)
+        {
+            throw new AppLoadException(conf.getPath(), "指定class实例化失败" + e.toString());
+        }
+        app.load();
+
+    }
+
+
+    public String getAppName()
+    {
+        return appName;
+    }
+
+
+    public String getAppPath()
+    {
+        return appPath;
+    }
+
+
+    public UserApp getApp()
+    {
+        return app;
     }
 
 

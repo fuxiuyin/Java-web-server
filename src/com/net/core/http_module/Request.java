@@ -29,9 +29,10 @@ public class Request
     private Socket socket;
 
 
-    public Request(String request, InetSocketAddress address, Socket socket) throws RequestException
+    public Request(String request, Socket socket) throws RequestException
     {
         this.socket = socket;
+        InetSocketAddress address = (InetSocketAddress)socket.getRemoteSocketAddress();
         clientIP = address.getAddress().getHostAddress();
         clientPoint = address.getPort();
         String[] lines = request.split("\r\n");
@@ -65,13 +66,11 @@ public class Request
                 break;
             }
         }
-        for(String line : lines)
+        String[] tmpHost = hostName.split(":");
+        if (tmpHost.length > 1)
         {
-            System.out.println(line);
+            hostName = tmpHost[0];
         }
-        System.out.println(method);
-        System.out.println(httpVersion);
-        System.out.println(path);
     }
 
 

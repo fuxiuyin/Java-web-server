@@ -2,6 +2,7 @@
   "appVersion": 1.0,
   "name": "test",
   "jarName": "app.test",
+  "className": "test",
   "requestMiddleware": {
     "httpVersion": "1.1"
   }

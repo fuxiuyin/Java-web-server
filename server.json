@@ -1,0 +1,12 @@
+{
+  "workerNum": 3,
+  "port": 8080,
+  "httpVersion": "1.1",
+  "serverName": "Npache",
+  "app": [
+    {
+      "host": "*",
+      "path": "/home/fuxiuyin/IdeaProjects/net_web/out/artifacts/test_jar"
+    }
+  ]
+}

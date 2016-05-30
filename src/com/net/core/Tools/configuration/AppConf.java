@@ -5,7 +5,7 @@ package com.net.core.Tools.configuration;
  */
 public class AppConf
 {
-    private String host;
+    private String host = "*";
     private String path;
     private String accessLogPath;
     private String errorLogPath;
@@ -15,8 +15,8 @@ public class AppConf
     {
         this.host = host;
         this.path = path;
-        this.accessLogPath = this.host + "access.log";
-        this.errorLogPath = this.host + "error.log";
+        this.accessLogPath = this.path + "access.log";
+        this.errorLogPath = this.path + "error.log";
     }
 
 

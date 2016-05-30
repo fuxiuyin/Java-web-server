@@ -15,6 +15,7 @@ public class AppConfiguration extends BaseConfiguration
     private Map<String, String> requestMiddlewares = null;
     private Map<String, String> responseMiddlewares = null;
     private String jarName = null;
+    private String className = null;
 
 
     protected AppConfiguration(JSONObject jobj)
@@ -48,6 +49,12 @@ public class AppConfiguration extends BaseConfiguration
     }
 
 
+    public String getJarName()
+    {
+        return jarName;
+    }
+
+
     public Set<String> getResponseMiddlewaresNameSet()
     {
         if (requestMiddlewares != null)
@@ -73,19 +80,27 @@ public class AppConfiguration extends BaseConfiguration
     }
 
 
+    public String getClassName()
+    {
+        return className;
+    }
+
+
     @Override
     protected void readConfiguration() throws ConfigurationLoadException
     {
         Object tmpVersion = jobj.get("appVersion");
         Object tmpName = jobj.get("name");
         Object tmpJarName = jobj.get("jarName");
-        if (tmpVersion == null || tmpName == null || tmpJarName == null)
+        Object tmpClassName = jobj.get("className");
+        if (tmpVersion == null || tmpName == null || tmpJarName == null || tmpClassName == null)
         {
             throw new ConfigurationLoadException(filePath, "格式错误");
         }
-        appVersion = (String)tmpVersion;
+        appVersion = tmpVersion.toString();
         appName = (String)tmpName;
         jarName = (String)tmpJarName;
+        className = (String)tmpClassName;
 
         JSONObject requestMiddleware = (JSONObject)jobj.get("requestMiddleware");
         JSONObject responseMiddleware = (JSONObject)jobj.get("responseMiddleware");

@@ -85,7 +85,7 @@ public class BaseConfiguration
             throw new ConfigurationLoadException(filePath, "文件格式错误", e);
         }
 
-        String version = (String)jobj.get("appVersion");
+        Object version = jobj.get("appVersion");
         BaseConfiguration configuration;
         if(version == null)
         {

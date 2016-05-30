@@ -16,6 +16,12 @@ public class Response
     private int httpCode = 200;
 
 
+    public void setContentType(String type)
+    {
+        this.header.put("Content-Type", type);
+    }
+
+
     public String getBody()
     {
         return body;

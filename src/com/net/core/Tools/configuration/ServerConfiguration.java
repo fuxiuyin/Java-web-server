@@ -1,6 +1,7 @@
 package com.net.core.Tools.configuration;
 
 import com.net.core.exception.ConfigurationLoadException;
+import com.sun.deploy.config.Config;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -16,6 +17,7 @@ public class ServerConfiguration extends BaseConfiguration
     private String httpVersion = null;
     private String serverName = null;
     private int workerNum = 3;
+    private int serverPort = 8080;
 
     protected ServerConfiguration(JSONObject jobj)
     {
@@ -26,6 +28,12 @@ public class ServerConfiguration extends BaseConfiguration
     public int getWorkerNum()
     {
         return workerNum;
+    }
+
+
+    public int getServerPort()
+    {
+        return serverPort;
     }
 
 
@@ -49,7 +57,11 @@ public class ServerConfiguration extends BaseConfiguration
     @Override
     protected void readConfiguration() throws ConfigurationLoadException
     {
-        String workerNumConf = (String)jobj.get("workerNum");
+        Object workerNumConf = null;
+        Object serverPortConf = null;
+        workerNumConf = jobj.get("workerNum");
+        serverPortConf = jobj.get("port");
+
         Object tmp = jobj.get("httpVersion");
         if (tmp != null)
         {
@@ -71,7 +83,12 @@ public class ServerConfiguration extends BaseConfiguration
 
         if (workerNumConf != null)
         {
-            workerNum = Integer.parseInt(workerNumConf);
+            workerNum = Integer.parseInt(workerNumConf.toString());
+        }
+
+        if (serverPortConf != null)
+        {
+            serverPort = Integer.parseInt(serverPortConf.toString());
         }
 
         JSONArray apps = (JSONArray)jobj.get("app");
@@ -94,6 +111,7 @@ public class ServerConfiguration extends BaseConfiguration
                 {
                     appConf.setErrorLogPath((String)tmpErrorLogPath);
                 }
+                allApp.add(appConf);
             }
         }
 
